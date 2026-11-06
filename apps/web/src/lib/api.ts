@@ -5,7 +5,7 @@ const SESSION_TOKEN_KEY = 'crm-session-token';
 const SESSION_LAST_ACTIVITY_KEY = 'crm-session-last-activity';
 export const SUPERADMIN_SESSION_KEY = 'crm-superadmin-session';
 export const IMPERSONATION_META_KEY = 'crm-impersonation-meta';
-export const SESSION_IDLE_TIMEOUT_MS = 15 * 60 * 1000;
+export const SESSION_IDLE_TIMEOUT_MS = 60 * 60 * 1000;
 
 export function impersonationMeta(): { returnPath: string } | null {
   if (typeof window === 'undefined') return null;
@@ -75,27 +75,27 @@ export function setSessionToken(token: string, updateLastActivity = true): void 
   window.sessionStorage.setItem(SESSION_TOKEN_KEY, token);
   redirectingToLogin = false;
   if (updateLastActivity) {
-    window.sessionStorage.setItem(SESSION_LAST_ACTIVITY_KEY, String(Date.now()));
+    window.localStorage.setItem(SESSION_LAST_ACTIVITY_KEY, String(Date.now()));
   }
 }
 
 export function clearSessionToken(): void {
   if (typeof window === 'undefined') return;
   window.sessionStorage.removeItem(SESSION_TOKEN_KEY);
-  window.sessionStorage.removeItem(SESSION_LAST_ACTIVITY_KEY);
+  window.localStorage.removeItem(SESSION_LAST_ACTIVITY_KEY);
   window.sessionStorage.removeItem(SUPERADMIN_SESSION_KEY);
   window.sessionStorage.removeItem(IMPERSONATION_META_KEY);
 }
 
 export function getSessionLastActivity(): number {
   if (typeof window === 'undefined') return 0;
-  const lastActivity = Number(window.sessionStorage.getItem(SESSION_LAST_ACTIVITY_KEY));
+  const lastActivity = Number(window.localStorage.getItem(SESSION_LAST_ACTIVITY_KEY));
   return Number.isFinite(lastActivity) ? lastActivity : 0;
 }
 
 export function recordSessionActivity(): void {
   if (getSessionToken()) {
-    window.sessionStorage.setItem(SESSION_LAST_ACTIVITY_KEY, String(Date.now()));
+    window.localStorage.setItem(SESSION_LAST_ACTIVITY_KEY, String(Date.now()));
   }
 }
 

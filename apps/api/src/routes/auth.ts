@@ -39,7 +39,7 @@ const TRANSIENT_DATABASE_ERROR_CODES = new Set([
 ]);
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 40,
+  max: 200,
   skipSuccessfulRequests: true,
   requestWasSuccessful: (_req, res) => res.statusCode < 400 || res.statusCode >= 500,
   standardHeaders: true,
@@ -51,7 +51,7 @@ const loginLimiter = rateLimit({
 });
 const heartbeatLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 30,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
   keyGenerator: (req) => {
